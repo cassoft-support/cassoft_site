@@ -1,0 +1,14 @@
+services:
+  web:
+    build:
+      target: dev
+    environment:
+      NODE_ENV: development
+      CHOKIDAR_USEPOLLING: "true"
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+    volumes:
+      - .:/app
+      - cassoft_node_modules:/app/node_modules
+
+volumes:
+  cassoft_node_modules:
