@@ -4,6 +4,8 @@ services:
 
   web:
     restart: unless-stopped
+    image: cassoft-test-web:${IMAGE_TAG:-latest}
+    pull_policy: never
     ports: !override
       - "127.0.0.1:${APP_PORT:-3017}:3000"
     healthcheck:

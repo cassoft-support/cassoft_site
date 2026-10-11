@@ -1,0 +1,86 @@
+name: Build and deploy test site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: cassoft-test-${{ github.ref }}
+      cancel-in-progress: false
+    env:
+      DEPLOY_HOST: 157.22.192.19
+      DEPLOY_USER: root
+      DEPLOY_DIR: /opt/cassoft-test
+      IMAGE: cassoft-test-web:${{ github.sha }}
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Build production image
+        run: docker build --pull --tag "$IMAGE" .
+
+      - name: Check deployment secret
+        id: deploy-check
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          if [[ -z "$DEPLOY_SSH_KEY" ]]; then
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Add the DEPLOY_SSH_KEY repository secret to enable deployment."
+          else
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Configure SSH
+        if: steps.deploy-check.outputs.enabled == 'true'
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' '157.22.192.19 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAv1JQmLn5yLa9NYmpwoshd0oZr63t7ulLZzaKsfrZjN' >> ~/.ssh/known_hosts
+
+      - name: Transfer production compose config
+        if: steps.deploy-check.outputs.enabled == 'true'
+        run: >-
+          scp -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes
+          compose.production.yaml
+          "$DEPLOY_USER@$DEPLOY_HOST:/tmp/cassoft-test-compose.production.yaml"
+
+      - name: Transfer built image
+        if: steps.deploy-check.outputs.enabled == 'true'
+        run: |
+          docker save "$IMAGE" | gzip -1 | ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes "$DEPLOY_USER@$DEPLOY_HOST" 'gunzip | docker load'
+
+      - name: Deploy web container
+        if: steps.deploy-check.outputs.enabled == 'true'
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes "$DEPLOY_USER@$DEPLOY_HOST" \
+            "install -m 644 /tmp/cassoft-test-compose.production.yaml '$DEPLOY_DIR/compose.production.yaml' && cd '$DEPLOY_DIR' && IMAGE_TAG='${GITHUB_SHA}' docker compose -p cassoft-test -f compose.yaml -f compose.production.yaml up -d --no-deps --no-build web"
+
+      - name: Verify deployed routes
+        if: steps.deploy-check.outputs.enabled == 'true'
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes "$DEPLOY_USER@$DEPLOY_HOST" '
+            for attempt in $(seq 1 24); do
+              if curl --fail --silent http://127.0.0.1:3017/v3 >/dev/null \
+                && curl --fail --silent http://127.0.0.1:3017/v2 >/dev/null; then
+                exit 0
+              fi
+              sleep 5
+            done
+            cd /opt/cassoft-test && docker compose -p cassoft-test -f compose.yaml -f compose.production.yaml logs --tail=80 web
+            exit 1
+          '
