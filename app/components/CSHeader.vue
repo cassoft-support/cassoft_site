@@ -6,6 +6,7 @@ const links = [
   { label: 'Платформы', to: '/platforms' },
   { label: 'Приложения', to: '/apps' },
   { label: 'КУБ-X', to: '/products/kub-x' },
+  { label: 'Решения', to: '/services' },
   { label: 'Контакты', to: '/contacts' }
 ]
 const route = useRoute()
@@ -19,6 +20,7 @@ watch(() => route.fullPath, () => { open.value = false })
       <nav id="cs-site-navigation" class="cs-site-nav" :class="{ 'cs-site-nav--open': open }" aria-label="Основная навигация">
         <NuxtLink v-for="link in links" :key="link.to" :to="link.to" :aria-current="route.path === link.to ? 'page' : undefined">{{ link.label }}</NuxtLink>
       </nav>
+      <NuxtLink class="cs-site-header__cta" to="/contacts">Обсудить проект <UIcon name="i-lucide-arrow-up-right" /></NuxtLink>
     </div>
   </header>
 </template>
@@ -30,4 +32,5 @@ watch(() => route.fullPath, () => { open.value = false })
 .cs-site-nav{display:flex;gap:22px;align-items:center}.cs-site-nav a{font-size:14px;font-weight:650;color:#10243e;text-decoration:none}.cs-site-nav a:hover,.cs-site-nav a[aria-current=page]{color:#1769e8}
 .cs-site-menu{display:none;border:1px solid #dce5ef;background:white;padding:10px 14px;border-radius:10px;font:inherit}
 @media(max-width:900px){.cs-site-menu{display:block}.cs-site-nav{display:none;position:absolute;top:100%;left:0;right:0;padding:16px 24px 24px;background:#fff;border-bottom:1px solid #dce5ef;flex-direction:column;align-items:stretch;gap:0;box-shadow:0 18px 24px #10243e14}.cs-site-nav--open{display:flex}.cs-site-nav a{padding:12px 4px}}
+.cs-site-header__cta{display:inline-flex;align-items:center;gap:8px;background:#2f80ff;color:white;padding:13px 17px;border-radius:11px;font-size:13px;font-weight:800;white-space:nowrap;text-decoration:none}.cs-site-header__cta:hover{background:#1769e8}@media(max-width:1100px){.cs-site-header__cta{display:none}}
 </style>
