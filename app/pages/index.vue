@@ -119,23 +119,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleMenuKeydown)
 
 <template>
   <div class="v3-page">
-    <header class="v3-header">
-      <div class="v3-container v3-header-inner">
-        <a class="v3-brand" href="#top" aria-label="CAS-soft, на главную">
-          <span class="v3-brand-mark"><UIcon name="i-lucide-box" aria-hidden="true" /></span>
-          <span>CAS-soft</span>
-        </a>
-        <nav class="v3-nav" :class="{ 'is-open': menuOpen }" aria-label="Главная навигация">
-          <a v-for="item in navigation" :key="item.label" :href="item.href" @click="menuOpen = false">{{ item.label }}</a>
-          <a class="v3-mobile-cta" href="#contact-form" @click="menuOpen = false">CRM без валидола <span aria-hidden="true">↗</span></a>
-        </nav>
-        <a class="v3-button v3-button-primary v3-header-cta" href="#contact-form">CRM без валидола <UIcon name="i-lucide-arrow-up-right" aria-hidden="true" /></a>
-        <button class="v3-menu-toggle" type="button" :aria-expanded="menuOpen" :aria-label="menuOpen ? 'Закрыть меню' : 'Открыть меню'" @click="menuOpen = !menuOpen">
-          <UIcon :name="menuOpen ? 'i-lucide-x' : 'i-lucide-menu'" aria-hidden="true" />
-        </button>
-      </div>
-    </header>
-
+    <CSHeader />
     <main id="top">
       <section class="v3-hero">
         <div class="v3-container v3-hero-grid">
@@ -216,7 +200,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleMenuKeydown)
       </section>
     </main>
 
-    <footer class="v3-footer"><div class="v3-container v3-footer-main"><div><a class="v3-brand" href="#top"><span class="v3-brand-mark"><UIcon name="i-lucide-box" aria-hidden="true" /></span><span>CAS-soft</span></a><p>CRM под процессы вашего бизнеса.</p></div><div><strong>Услуги</strong><a href="#services">Внедрение и аудит</a><a href="#services">Автоматизация и интеграции</a><a href="#services">Разработка и поддержка</a></div><div><strong>Решения</strong><a href="#solutions">Текущая CRM</a><a href="#platforms">Выбор платформы</a><a href="#products">Приложения</a></div><div><strong>Контакты</strong><a href="mailto:info@cassoft.ru">info@cassoft.ru</a><a href="tel:+79330158058">+7 (933) 015-80-58</a></div></div><div class="v3-container v3-footer-bottom"><span>© {{ new Date().getFullYear() }} CAS-soft</span><span>Концепция главной v3 · <a href="/">Текущая главная</a> · <a href="/v2">Версия 2</a></span></div></footer>
+    <CSFooter />
   </div>
 </template>
 
