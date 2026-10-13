@@ -1,5 +1,4 @@
 <script setup lang="ts">
-const menuOpen = ref(false)
 const form = reactive({
   name: '',
   company: '',
@@ -12,14 +11,6 @@ useSeoMeta({
   title: 'CRM без валидола — CAS-soft',
   description: 'Настроим CRM под процессы бизнеса, подключим интеграции, обучим команду и останемся рядом после запуска.'
 })
-
-const navigation = [
-  { label: 'Как помогаем', href: '#help' },
-  { label: 'Услуги', href: '/services' },
-  { label: 'Решения', href: '#solutions' },
-  { label: 'Продукты', href: '/apps' },
-  { label: 'Контакты', href: '/contacts' }
-]
 
 const onboarding = [
   { title: 'Разберёмся', text: 'Изучим процессы, роли и точки, где сейчас теряются время и обращения.', icon: 'i-lucide-search-check' },
@@ -102,10 +93,6 @@ const products = [
   }
 ]
 
-function handleMenuKeydown(event: KeyboardEvent) {
-  if (event.key === 'Escape') menuOpen.value = false
-}
-
 // Отправка заявок будет подключена к API при запуске проекта.
 // До настройки endpoint форма работает только как интерфейс.
 const requestNotice = ref('')
@@ -113,8 +100,6 @@ function submitRequest() {
   requestNotice.value = 'Форма пока работает в демонстрационном режиме. Заявка не отправлена. Для связи используйте контакты ниже.'
 }
 
-onMounted(() => document.addEventListener('keydown', handleMenuKeydown))
-onBeforeUnmount(() => document.removeEventListener('keydown', handleMenuKeydown))
 </script>
 
 <template>
