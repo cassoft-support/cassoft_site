@@ -2432,3 +2432,10 @@ button {
         left: auto;
     }
 }
+/* Shared inner-page layout */
+.crm-site{min-height:100vh;background:#f6f9fc;color:#10243e;font-family:Manrope,Inter,Arial,sans-serif}
+.crm-site main{display:block}
+.crm-site article{transition:border-color .2s ease,transform .2s ease}
+.crm-site article:hover{border-color:#9fc6ff;transform:translateY(-2px)}
+.crm-site :focus-visible{outline:3px solid #2f80ff;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.crm-site *{transition:none!important;animation:none!important}}
