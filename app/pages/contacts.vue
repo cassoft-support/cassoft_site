@@ -18,3 +18,7 @@ const cards = [{"title":"Напишите нам","text":"info@cassoft.ru"},{"ti
     <footer style="background:#07182a;color:white;padding:32px 24px;text-align:center">© {{new Date().getFullYear()}} CAS-soft · CRM без валидола</footer>
   </div>
 </template>
+
+<style>
+.crm-site{min-height:100vh;background:#f6f9fc;color:#10243e;font-family:Manrope,Inter,Arial,sans-serif}.crm-site .v3-header{background:#fff;border-bottom:1px solid #dce5ef;position:sticky;top:0;z-index:30}.crm-site .v3-container{max-width:1180px;margin:auto;padding:0 24px}.crm-site .v3-header-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:76px}.crm-site .v3-brand{font-size:22px;font-weight:800;color:#10243e;text-decoration:none}.crm-site .v3-nav{display:flex;align-items:center;gap:22px;flex-wrap:wrap}.crm-site .v3-nav a{color:#10243e;font-size:14px;text-decoration:none}.crm-site .v3-nav a:hover{color:#2f80ff}@media(max-width:760px){.crm-site .v3-header-inner{align-items:flex-start;flex-direction:column;padding-top:16px;padding-bottom:16px}.crm-site .v3-nav{gap:10px 18px}.crm-site .v3-nav a{font-size:13px}}
+</style>
