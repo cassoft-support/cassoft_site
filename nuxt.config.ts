@@ -19,14 +19,14 @@ export default defineNuxtConfig({
     app: {
         head: {
             htmlAttrs: { lang: 'ru' },
-            title: 'CAS-soft — CRM и автоматизация под ваш бизнес',
+            title: 'CRM без валидола — CAS-soft',
             meta: [
                 {
                     name: 'description',
                     content:
-                        'Внедряем CRM, автоматизируем процессы, интегрируем сервисы и разрабатываем решения под задачи бизнеса.'
+                        'Внедрение и настройка CRM без лишних нервов. Автоматизация, интеграции и разработка CAS-soft.'
                 },
-                { name: 'theme-color', content: '#f5f6f2' }
+                { name: 'theme-color', content: '#f6f9fc' }
             ]
         }
     },
