@@ -15,10 +15,10 @@ useSeoMeta({
 
 const navigation = [
   { label: 'Как помогаем', href: '#help' },
-  { label: 'Услуги', href: '#services' },
+  { label: 'Услуги', href: '/services' },
   { label: 'Решения', href: '#solutions' },
-  { label: 'Продукты', href: '#products' },
-  { label: 'Контакты', href: '#contacts' }
+  { label: 'Продукты', href: '/apps' },
+  { label: 'Контакты', href: '/contacts' }
 ]
 
 const onboarding = [
@@ -106,15 +106,11 @@ function handleMenuKeydown(event: KeyboardEvent) {
   if (event.key === 'Escape') menuOpen.value = false
 }
 
+// Отправка заявок будет подключена к API при запуске проекта.
+// До настройки endpoint форма работает только как интерфейс.
+const requestNotice = ref('')
 function submitRequest() {
-  const body = [
-    `Имя: ${form.name}`,
-    `Компания: ${form.company || 'не указана'}`,
-    `Контакт: ${form.contact}`,
-    `Ситуация: ${form.situation || 'нужна консультация'}`,
-    `Что происходит: ${form.details}`
-  ].join('\n')
-  window.location.href = `mailto:info@cassoft.ru?subject=${encodeURIComponent('План действий для CRM')}&body=${encodeURIComponent(body)}`
+  requestNotice.value = 'Форма пока работает в демонстрационном режиме. Заявка не отправлена. Для связи используйте контакты ниже.'
 }
 
 onMounted(() => document.addEventListener('keydown', handleMenuKeydown))
@@ -216,7 +212,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleMenuKeydown)
       </section>
 
       <section id="contacts" class="v3-contact">
-        <div class="v3-container v3-contact-grid"><div class="v3-contact-copy"><p class="v3-eyebrow">Первый шаг — понять ситуацию</p><h2>Хотите CRM без валидола?</h2><p>Расскажите, что сейчас не работает, что выбираете или какую систему хотите запустить. Поможем определить следующий шаг.</p><div class="v3-contact-details"><a href="mailto:info@cassoft.ru">info@cassoft.ru</a><a href="tel:+79330158058">+7 (933) 015-80-58</a></div></div><form id="contact-form" class="v3-form" @submit.prevent="submitRequest"><h3>Получить план действий</h3><div class="v3-form-row"><label>Имя<input v-model="form.name" name="name" autocomplete="name" required></label><label>Компания <span>необязательно</span><input v-model="form.company" name="company" autocomplete="organization"></label></div><label>Телефон или email<input v-model="form.contact" name="contact" autocomplete="email" required></label><label>Что сейчас происходит<textarea v-model="form.details" name="details" rows="3" required></textarea></label><label>Ваша ситуация<select v-model="form.situation" name="situation"><option value="">Пока не знаю, нужна консультация</option><option>CRM уже есть, но не работает</option><option>Выбираем CRM</option><option>Нужна настройка с нуля</option><option>Нужна интеграция</option><option>Нужна доработка или разработка</option></select></label><button class="v3-button v3-button-primary" type="submit">Получить план действий <UIcon name="i-lucide-arrow-up-right" aria-hidden="true" /></button></form></div>
+        <div class="v3-container v3-contact-grid"><div class="v3-contact-copy"><p class="v3-eyebrow">Первый шаг — понять ситуацию</p><h2>Хотите CRM без валидола?</h2><p>Расскажите, что сейчас не работает, что выбираете или какую систему хотите запустить. Поможем определить следующий шаг.</p><div class="v3-contact-details"><a href="mailto:info@cassoft.ru">info@cassoft.ru</a><a href="tel:+79330158058">+7 (933) 015-80-58</a></div></div><form id="contact-form" class="v3-form" @submit.prevent="submitRequest"><h3>Получить план действий</h3><div class="v3-form-row"><label>Имя<input v-model="form.name" name="name" autocomplete="name" required></label><label>Компания <span>необязательно</span><input v-model="form.company" name="company" autocomplete="organization"></label></div><label>Телефон или email<input v-model="form.contact" name="contact" autocomplete="email" required></label><label>Что сейчас происходит<textarea v-model="form.details" name="details" rows="3" required></textarea></label><label>Ваша ситуация<select v-model="form.situation" name="situation"><option value="">Пока не знаю, нужна консультация</option><option>CRM уже есть, но не работает</option><option>Выбираем CRM</option><option>Нужна настройка с нуля</option><option>Нужна интеграция</option><option>Нужна доработка или разработка</option></select></label><button class="v3-button v3-button-primary" type="submit">Получить план действий <UIcon name="i-lucide-arrow-up-right" aria-hidden="true" /></button><p v-if="requestNotice" role="status" aria-live="polite">{{ requestNotice }}</p></form></div>
       </section>
     </main>
 
